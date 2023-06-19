@@ -76,7 +76,7 @@ RETURNING *;
 return pool
 .query(queryString, [name, email, password])
 .then( (result) => {
-  console.log(reslut.rows);
+  console.log(result.rows);
   return result.rows;
 })
 .catch((err) => {

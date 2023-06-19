@@ -28,15 +28,13 @@ const getUserWithEmail = function (email) {
   return pool
     .query(queryString, [email])
     .then( (result) => {
-      console.log(result.rows);;
+      console.log("get User with email",result.rows);;
       return result.rows;
     })
     .catch((err) => {
       console.log(err.message);
     });
   };
-
-  console.log(getUserWithEmail('tristanjacobs@gmail.com'))
   
 // const getUserWithEmail = function (email) {
 //   let resolvedUser = null;
@@ -81,9 +79,23 @@ const getUserWithId = function (id) {
  * @return {Promise<{}>} A promise to the user.
  */
 
-const addUser = function (user) {
-
-};
+const addUser = function (name, email, password) {
+  const queryString = `
+  INSERT INTO users (name, email, password)
+  VALUES($1, $2, $3)
+  RETURNING *;
+  `
+  return pool
+  .query(queryString, [name, email, password])
+  .then( (result) => {
+    console.log(result.rows);
+    return result.rows;
+  })
+  .catch((err) => {
+    console.log(err.message)
+  })
+  
+  };
 
 // const addUser = function (user) {
 //   const userId = Object.keys(users).length + 1;
@@ -100,7 +112,28 @@ const addUser = function (user) {
  * @return {Promise<[{}]>} A promise to the reservations.
  */
 const getAllReservations = function (guest_id, limit = 10) {
-  return getAllProperties(null, 2);
+
+  const queryString = `
+  select p.*, r.*, pr.*, u.* , avg(pr.rating) as avg_rating
+  from properties p 
+  join reservations r on p.id = r.property_id 
+  join property_reviews pr on r.property_id  = pr.property_id
+  join users u ON p.owner_id = u.id 
+  where u.id = $1
+  group by p.id, pr.id, r.id, u.id, p.title, p.cost_per_night , r.start_date 
+  order by avg(pr.rating) DESC
+  limit $2
+`
+  return pool
+    .query(queryString,[guest_id, limit])
+    .then((result) => {
+      console.log(result.rows);
+      return result.rows
+    })
+    .catch((err) => {
+      console.log(err.message);
+    })
+  
 };
 
 /// Properties
@@ -115,7 +148,6 @@ const queryString = `
 select * from properties ORDER BY id LIMIT $1;
 `
 const getAllProperties = (options, limit = 10) => {
-  console
   return pool
     .query(queryString, [limit])
     .then((result) => {
