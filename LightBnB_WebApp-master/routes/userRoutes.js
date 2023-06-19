@@ -25,22 +25,24 @@ router.post("/", (req, res) => {
 router.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+  console.log("test", email, password)
 
   database.getUserWithEmail(email).then((user) => {
     if (!user) {
       return res.send({ error: "no user with that id" });
     }
 
-    if (!bcrypt.compareSync(password, user.password)) {
+    if (!bcrypt.compareSync(password, user[0].password)) {
       return res.send({ error: "error" });
     }
-
-    req.session.userId = user.id;
+    
+    req.session.userId = user[0].id;
+   
     res.send({
       user: {
-        name: user.name,
-        email: user.email,
-        id: user.id,
+        name: user[0].name,
+        email: user[0].email,
+        id: user[0].id,
       },
     });
   });

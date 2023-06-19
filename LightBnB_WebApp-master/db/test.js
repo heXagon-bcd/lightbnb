@@ -18,36 +18,24 @@ const pool = new Pool({
  * @param {String} email The email of the user.
  * @return {Promise<{}>} A promise to the user.
  */
-
 const getUserWithEmail = function (email) {
-  const queryString = `
-  select *
-  from users
-  where users.email = $1
-  `
-  return pool
-    .query(queryString, [email])
-    .then( (result) => {
-      console.log(result.rows);;
-      return result.rows;
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
-  };
+const queryString = `
+select *
+from users
+where users.email = $1
+`
+return pool
+  .query(queryString, [email])
+  .then( (result) => {
+    console.log(result.rows)
+    return result.rows;
+  })
+  .catch((err) => {
+    console.log(err.message);
+  });
+};
 
-  console.log(getUserWithEmail('tristanjacobs@gmail.com'))
-  
-// const getUserWithEmail = function (email) {
-//   let resolvedUser = null;
-//   for (const userId in users) {
-//     const user = users[userId];
-//     if (user?.email.toLowerCase() === email?.toLowerCase()) {
-//       resolvedUser = user;
-//     }
-//   }
-//   return Promise.resolve(resolvedUser);
-// };
+console.log(getUserWithEmail('tristanjacobs@gmail.com'))
 
 /**
  * Get a single user from the database given their id.
@@ -69,28 +57,35 @@ const getUserWithId = function (id) {
     .catch((err) => {
       console.log(err.message);
     });
+
 };
 
-// const getUserWithId = function (id) {
-//   return Promise.resolve(users[id]);
-// };
+console.log(getUserWithId(1))
 
 /**
  * Add a new user to the database.
  * @param {{name: string, password: string, email: string}} user
  * @return {Promise<{}>} A promise to the user.
  */
-
-const addUser = function (user) {
+const addUser = function (name, email, password) {
+const queryString = `
+INSERT INTO users (name, email, password)
+VALUES($1, $2, $3)
+RETURNING *;
+`
+return pool
+.query(queryString, [name, email, password])
+.then( (result) => {
+  console.log(reslut.rows);
+  return result.rows;
+})
+.catch((err) => {
+  console.log(err.message)
+})
 
 };
 
-// const addUser = function (user) {
-//   const userId = Object.keys(users).length + 1;
-//   user.id = userId;
-//   users[userId] = user;
-//   return Promise.resolve(user);
-// };
+console.log(addUser('shawn he', 'shawnhe05@gmail.com', '$2a$10$FB/BOAVhpuLvpOREQVmvmezD4ED/.JBIDRh70tGevYzYzQgFId2u.'))
 
 /// Reservations
 
@@ -112,20 +107,22 @@ const getAllReservations = function (guest_id, limit = 10) {
  * @return {Promise<[{}]>}  A promise to the properties.
  */
 const queryString = `
-select * from properties ORDER BY id LIMIT $1;
+select * from properties LIMIT $1;
 `
 const getAllProperties = (options, limit = 10) => {
-  console
+  console.log(limit)
   return pool
-    .query(queryString, [limit])
+    .query(queryString, 10)
     .then((result) => {
-      console.log(result.rows);
+      console.log(results.rows)
       return result.rows
     })
     .catch((err) => {
       console.log(err.message);
     });
 };
+
+console.log(getAllProperties())
 
 // const getAllProperties = function (options, limit = 10) {
 //   const limitedProperties = {};
