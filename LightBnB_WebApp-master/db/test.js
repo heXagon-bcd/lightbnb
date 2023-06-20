@@ -51,7 +51,7 @@ const getUserWithId = function (id) {
   return pool
     .query(queryString, [id])
     .then( (result) => {
-      console.log(result.rows);
+      console.log("get user with id", result.rows);
       return result.rows;
     })
     .catch((err) => {
@@ -67,25 +67,25 @@ console.log(getUserWithId(1))
  * @param {{name: string, password: string, email: string}} user
  * @return {Promise<{}>} A promise to the user.
  */
-const addUser = function (name, email, password) {
-const queryString = `
-INSERT INTO users (name, email, password)
-VALUES($1, $2, $3)
-RETURNING *;
-`
-return pool
-.query(queryString, [name, email, password])
-.then( (result) => {
-  console.log(result.rows);
-  return result.rows;
-})
-.catch((err) => {
-  console.log(err.message)
-})
+// const addUser = function (name, email, password) {
+// const queryString = `
+// INSERT INTO users (name, email, password)
+// VALUES($1, $2, $3)
+// RETURNING *;
+// `
+// return pool
+// .query(queryString, [name, email, password])
+// .then( (result) => {
+//   console.log(result.rows);
+//   return result.rows;
+// })
+// .catch((err) => {
+//   console.log(err.message)
+// })
 
-};
+// };
 
-console.log(addUser('shawn he', 'shawnhe05@gmail.com', '$2a$10$FB/BOAVhpuLvpOREQVmvmezD4ED/.JBIDRh70tGevYzYzQgFId2u.'))
+// console.log(addUser('shawn he', 'shawnhe05@gmail.com', '$2a$10$FB/BOAVhpuLvpOREQVmvmezD4ED/.JBIDRh70tGevYzYzQgFId2u.'))
 
 /// Reservations
 
@@ -112,9 +112,9 @@ select * from properties LIMIT $1;
 const getAllProperties = (options, limit = 10) => {
   console.log(limit)
   return pool
-    .query(queryString, 10)
+    .query(queryString, [10])
     .then((result) => {
-      console.log(results.rows)
+      console.log("get all properties", result.rows)
       return result.rows
     })
     .catch((err) => {
