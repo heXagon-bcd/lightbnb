@@ -9,9 +9,7 @@ const pool = new Pool({
   database: 'lightbnb'
 });
 
-/// Users
-
-// pool.query(`SELECT title FROM properties LIMIT 10;`).then(response => {console.log(response)})
+///Users
 
 /**
  * Get a single user from the database given their email.
@@ -35,17 +33,6 @@ const getUserWithEmail = function (email) {
       console.log(err.message);
     });
   };
-  
-// const getUserWithEmail = function (email) {
-//   let resolvedUser = null;
-//   for (const userId in users) {
-//     const user = users[userId];
-//     if (user?.email.toLowerCase() === email?.toLowerCase()) {
-//       resolvedUser = user;
-//     }
-//   }
-//   return Promise.resolve(resolvedUser);
-// };
 
 /**
  * Get a single user from the database given their id.
@@ -69,10 +56,6 @@ const getUserWithId = function (id) {
     });
 };
 
-// const getUserWithId = function (id) {
-//   return Promise.resolve(users[id]);
-// };
-
 /**
  * Add a new user to the database.
  * @param {{name: string, password: string, email: string}} user
@@ -92,17 +75,10 @@ const addUser = function (name, email, password) {
     return result.rows;
   })
   .catch((err) => {
-    console.log(err.message)
+    console.log(err.message);
   })
   
   };
-
-// const addUser = function (user) {
-//   const userId = Object.keys(users).length + 1;
-//   user.id = userId;
-//   users[userId] = user;
-//   return Promise.resolve(user);
-// };
 
 /// Reservations
 
@@ -146,17 +122,17 @@ const getAllReservations = function (guest_id, limit = 10) {
  */
 
   const getAllProperties = (options, limit = 10) => {
-  // 1
+
   const queryParams = [];
   let whereAdded = false;
-  // 2
+ 
   let queryString = `
   SELECT properties.*, avg(property_reviews.rating) as average_rating
   FROM properties
   JOIN property_reviews ON properties.id = property_id
   `;
 
-  // 3
+  // search by city
   if (options.city) {
     queryParams.push(`%${options.city}%`);
     queryString += `WHERE city LIKE $${queryParams.length} `;
@@ -223,14 +199,11 @@ const getAllReservations = function (guest_id, limit = 10) {
     });
 };
 
-
 /**
  * Add a property to the database
  * @param {{}} property An object containing all of the property details.
  * @return {Promise<{}>} A promise to the property.
  */
-
-
 
 const addProperty = function (property) {
   queryString = `
@@ -252,15 +225,6 @@ return pool
 });
 
 };
-
-
-// const addProperty = function (property) {
-//   console.log(property)
-//   const propertyId = Object.keys(properties).length + 1;
-//   property.id = propertyId;
-//   properties[propertyId] = property;
-//   return Promise.resolve(property);
-// };
 
 module.exports = {
   getUserWithEmail,
