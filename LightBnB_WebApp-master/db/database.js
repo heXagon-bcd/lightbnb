@@ -109,7 +109,6 @@ const getAllReservations = function (guest_id, limit = 10) {
     .catch((err) => {
       console.log(err.message);
     })
-  
 };
 
 /// Properties
@@ -175,7 +174,7 @@ const getAllReservations = function (guest_id, limit = 10) {
     whereAdded = true;
   }
 
-  // 4
+  // group by
   queryParams.push(limit);
   queryString += `
   GROUP BY properties.id
@@ -183,11 +182,7 @@ const getAllReservations = function (guest_id, limit = 10) {
   LIMIT $${queryParams.length};
   `;
 
-  // 5
-  console.log(queryString, queryParams);
-
-  // 6
-
+  // Pool
   return pool
     .query(queryString, queryParams)
     .then((result) => {
@@ -211,8 +206,6 @@ const addProperty = function (property) {
   VALUES (${property.owner_id}, '${property.title}', '${property.description}', '${property.thumbnail_photo_url}', '${property.cover_photo_url}', ${property.cost_per_night}, '${property.street}', '${property.city}', '${property.province}', '${property.post_code}', '${property.country}', '${property.parking_spaces}', '${property.number_of_bathrooms}', '${property.number_of_bedrooms}')
   RETURNING *;
   `
-console.log("addProperty", property)
-console.log(queryString)
 
 return pool
 .query(queryString,)
