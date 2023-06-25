@@ -1,4 +1,14 @@
 # LightBnB
+A simple single page airbnb clone that uses server side javascript to display the information from queries to web pages via SQL queries
+
+## Site Features
+
+The site has the ability to query our db for specific property based on fields in our psql server
+
+[Search Query](https://github.com/heXagon-bcd/lightbnb/blob/main/LightBnB_WebApp-master/images/Search%20Query.png)
+
+It also has the ability to add property to our site by inserting rows into our psql server
+[Add Property Query](https://github.com/heXagon-bcd/lightbnb/blob/main/LightBnB_WebApp-master/images/Create%20Query.png)
 
 ## Project Structure
 
