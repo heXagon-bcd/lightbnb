@@ -30,8 +30,10 @@ $(() => {
   $searchPropertyForm.on('submit', function(event) {
     event.preventDefault();
     const data = $(this).serialize();
+    console.log(data)
 
     getAllListings(data).then(function( json ) {
+      console.log("json");
       propertyListings.addProperties(json.properties);
       views_manager.show('listings');
     });

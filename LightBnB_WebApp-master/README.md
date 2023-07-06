@@ -1,6 +1,11 @@
 # LightBnB
 A simple single page airbnb clone that uses server side javascript to display the information from queries to web pages via SQL queries
 
+## Install Instructions
+1. Install dependencies using the npm install command
+2. Start server in terminal with node server command.  This app will be served on http://localhost:3000/
+3. Go to http://localhost:3000/ in your broser.
+
 ## Site Features
 
 The site has the ability to query our db for specific property based on fields in our psql server
