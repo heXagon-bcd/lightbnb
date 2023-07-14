@@ -1,5 +1,4 @@
 $(() => {
-
   const $signUpForm = $(`
   <form id="sign-up-form" class="sign-up-form">
         <p>Sign Up</p>
@@ -24,21 +23,21 @@ $(() => {
   `);
   window.$signUpForm = $signUpForm;
 
-  $signUpForm.on('submit', function(event) {
+  $signUpForm.on("submit", function (event) {
     event.preventDefault();
 
     const data = $(this).serialize();
+    console.log(data);
     signUp(data)
       .then(getMyDetails)
       .then((json) => {
         header.update(json.user);
-        views_manager.show('listings');
+        views_manager.show("listings");
       });
   });
 
-  $('body').on('click', '#sign-up-form__cancel', function() {
-    views_manager.show('listings');
+  $("body").on("click", "#sign-up-form__cancel", function () {
+    views_manager.show("listings");
     return false;
   });
-      
 });
