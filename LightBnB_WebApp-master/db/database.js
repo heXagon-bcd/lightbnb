@@ -43,13 +43,13 @@ const getUserWithId = function (id) {
   const queryString = `
   SELECT *
   FROM users
-  WHERE users.id = $1
+  WHERE users.id = $1;
   `;
   return pool
     .query(queryString, [id])
     .then((result) => {
       console.log(result.rows);
-      return result.rows;
+      return result.rows;//sent back object, sql will return back an array
     })
     .catch((err) => {
       console.log(err.message);
@@ -67,13 +67,13 @@ const addUser = function (name, email, password) {
   console.log("adduser", name, email, password);
   const queryString = `
   INSERT INTO users (name, email, password)
-  VALUES( $1, $2, $3)
-  RETURNING *;
+  VALUES ($1, $2, $3)
+  RETURNING*;
   `;
   return pool
     .query(queryString, [name, email, password])
     .then((result) => {
-      console.log(result.rows);
+      console.log("add user results",result.rows);
       return result.rows;
     })
     .catch((err) => {
@@ -170,22 +170,26 @@ const getAllProperties = (options, limit = 10) => {
     whereAdded = true;
   }
 
+  // group by
+  queryString += `GROUP BY properties.id`;
+
   // Search by minimum rating
   if (options.minimum_rating) {
     queryParams.push(options.minimum_rating);
-    queryString += whereAdded ? `AND ` : `WHERE `;
-    queryString += `property_reviews.rating >= $${queryParams.length} `;
+    queryString += whereAdded ? `AND ` : ` HAVING `;
+    queryString += `avg(property_reviews.rating) >= $${queryParams.length}`
     whereAdded = true;
   }
 
-  // group by
+  //add limit
   queryParams.push(limit);
   queryString += `
-  GROUP BY properties.id
   ORDER BY cost_per_night
   LIMIT $${queryParams.length};
-  `;
-
+  `
+  
+  console.log("queryparams", queryParams)
+  console.log("queryString", queryString)
   // Pool
   return pool
     .query(queryString, queryParams)
@@ -207,7 +211,7 @@ const getAllProperties = (options, limit = 10) => {
 const addProperty = function (property) {
   queryString = `
   INSERT INTO properties (owner_id, title, description, thumbnail_photo_url, cover_photo_url, cost_per_night, street, city, province, post_code, country, parking_spaces, number_of_bathrooms, number_of_bedrooms)
-  VALUES (${property.owner_id}, '${property.title}', '${property.description}', '${property.thumbnail_photo_url}', '${property.cover_photo_url}', ${property.cost_per_night}, '${property.street}', '${property.city}', '${property.province}', '${property.post_code}', '${property.country}', '${property.parking_spaces}', '${property.number_of_bathrooms}', '${property.number_of_bedrooms}')
+  VALUES (${property.owner_id}, '${property.title}', '${property.description}', '${property.thumbnail_photo_url}', '${property.cover_photo_url}', ${property.cost_per_night * 100}, '${property.street}', '${property.city}', '${property.province}', '${property.post_code}', '${property.country}', '${property.parking_spaces}', '${property.number_of_bathrooms}', '${property.number_of_bedrooms}')
   RETURNING *;
   `;
 
