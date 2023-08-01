@@ -49,6 +49,7 @@ $(() => {
     propertyListings.clearListings();
     getAllReservations()
       .then(function(json) {
+        console.log("getAllRervations json", json);
         propertyListings.addProperties(json.reservations, true);
         views_manager.show('listings');
       })

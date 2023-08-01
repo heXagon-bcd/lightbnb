@@ -90,7 +90,7 @@ const addUser = function (name, email, password) {
  */
 const getAllReservations = function (guest_id, limit = 10) {
   const queryString = `
-  SELECT p.*, r.*, pr.*, u.* , avg(pr.rating) as avg_rating
+  SELECT p.*, r.*, pr.*, u.* , avg(pr.rating) as average_rating
   FROM properties p 
   JOIN reservations r ON p.id = r.property_id 
   JOIN property_reviews pr ON r.property_id  = pr.property_id
