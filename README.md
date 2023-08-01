@@ -4,8 +4,9 @@ A simple single page airbnb clone that uses server side javascript to display th
 ## Install Instructions
 1. Go to the `LightBnB_WebApp-master` folder
 2. Install dependencies using the `npm install` command
-3. Start server in terminal with `node server` command.  This app will be served on http://localhost:3000/
+3. Start server in terminal with `npm start local` command.  This app will be served on http://localhost:3000/
 4. Go to http://localhost:3000/ in your browser.
+5. Open vscode and inject the lighbnb data by using "\i ../seeds/02_seeds.sql" in your psql environment
 
 ## Site Features
 

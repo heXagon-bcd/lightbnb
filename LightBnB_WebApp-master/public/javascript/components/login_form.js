@@ -26,9 +26,9 @@ $(() => {
     const data = $(this).serialize();
     logIn(data)
       .then(json => {
-        console.log(json);
+        console.log("json",json);
         if (!json.user) {
-          views_manager.show('error', 'Failed to login');
+          views_manager.show('error', 'Failed to login'); 
           return;
         }
         console.log(json.user);

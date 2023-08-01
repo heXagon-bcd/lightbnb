@@ -12,13 +12,17 @@ router.post("/", (req, res) => {
   database
    .addUser(user.name, user.email, user.password)//need to accesss object
     // .addUser('test2', 'test2@gmail.com', 'test')
-    .then((user) => {
-      if (!user) {
+    .then((userReturn) => {
+      console.log("user Return", userReturn)
+      const userData = userReturn[0];
+      if (!userData) {
         return res.send({ error: "error" });
       }
-
-      req.session.userId = user.id;
-      res.send("🤗");
+      console.log("userData",userData);
+      req.session.userId = userData.id;
+       res.send({
+        user:userData
+      });
     })
     .catch((e) => res.send(e));
 });
@@ -39,8 +43,8 @@ router.post("/login", (req, res) => {
       return res.send({ error: "error" });
     }
     
-    req.session.userId = user[0].id;
-   
+    req.session.userId = user[0].id;//cookie validation --> review
+  
     res.send({
       user: {
         name: user[0].name,
@@ -60,6 +64,7 @@ router.post("/logout", (req, res) => {
 // Return information about the current user (based on cookie value)
 router.get("/me", (req, res) => {
   const userId = req.session.userId;
+  console.log("userId", userId)
   if (!userId) {
     return res.send({ message: "not logged in" });
   }
@@ -70,13 +75,10 @@ router.get("/me", (req, res) => {
       if (!user) {
         return res.send({ error: "no user with that id" });
       }
-
+console.log("/me user", user)
+      const userData = user[0];
       res.send({
-        user: {
-          name: user.name,
-          email: user.email,
-          id: userId,
-        },
+        user: userData
       });
     })
     .catch((e) => res.send(e));

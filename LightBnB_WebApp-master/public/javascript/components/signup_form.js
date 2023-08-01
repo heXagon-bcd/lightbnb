@@ -27,10 +27,11 @@ $(() => {
     event.preventDefault();
 
     const data = $(this).serialize();
-    console.log(data);
+    console.log("data", data);
     signUp(data)
       .then(getMyDetails)
       .then((json) => {
+        console.log("json",json)
         header.update(json.user);
         views_manager.show("listings");
       });
